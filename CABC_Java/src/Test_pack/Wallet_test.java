@@ -9,6 +9,7 @@ import org.hyperledger.fabric.gateway.Wallets;
 
 public class Wallet_test {
 	public static void main(String[] args) {
+		System.out.println("start");
 		Path walletDirectory = Paths.get("wallet");
 		try {
 			Wallet wallet = Wallets.newFileSystemWallet(walletDirectory);
@@ -16,5 +17,6 @@ public class Wallet_test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("nice");
 	}
 }

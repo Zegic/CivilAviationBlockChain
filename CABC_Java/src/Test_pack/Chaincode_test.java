@@ -1,21 +1,22 @@
+package Test_pack;
+
 import org.hyperledger.fabric.contract.Context;
 import org.hyperledger.fabric.contract.ContractInterface;
 import org.hyperledger.fabric.shim.ChaincodeException;
 import org.hyperledger.fabric.shim.ChaincodeStub;
 import com.owlike.genson.Genson;
 
+
 public class Chaincode_test implements ContractInterface {
     private final Genson genson = new Genson();
 
-    // å®ç°æ™ºèƒ½åˆçº¦æ¥å£çš„invokeæ–¹æ³•
-    @Override
+    // ÊµÏÖÖÇÄÜºÏÔ¼½Ó¿ÚµÄinvoke·½·¨
     public void invoke(Context ctx) {
         ChaincodeStub stub = ctx.getStub();
-
-        // è·å–è°ƒç”¨çš„å‡½æ•°åç§°
+        // »ñÈ¡µ÷ÓÃµÄº¯ÊıÃû³Æ
         String function = stub.getFunction();
 
-        // æ ¹æ®å‡½æ•°åç§°è¿›è¡Œä¸åŒçš„å¤„ç†é€»è¾‘
+        // ¸ù¾İº¯ÊıÃû³Æ½øĞĞ²»Í¬µÄ´¦ÀíÂß¼­
         switch (function) {
             case "storePoints":
                 storePoints(ctx, stub.getParameters());
@@ -24,49 +25,49 @@ public class Chaincode_test implements ContractInterface {
                 getPoints(ctx, stub.getParameters());
                 break;
             default:
-                // ä¸æ”¯æŒçš„å‡½æ•°åç§°ï¼ŒæŠ›å‡ºå¼‚å¸¸
+                // ²»Ö§³ÖµÄº¯ÊıÃû³Æ£¬Å×³öÒì³£
                 throw new ChaincodeException("Unsupported function: " + function);
         }
     }
 
-    // å­˜å‚¨ç§¯åˆ†åˆ°åŒºå—é“¾çŠ¶æ€ä¸­
+    // ´æ´¢»ı·Öµ½Çø¿éÁ´×´Ì¬ÖĞ
     private void storePoints(Context ctx, String[] args) {
         ChaincodeStub stub = ctx.getStub();
 
         if (args.length != 2) {
-            // å‚æ•°ä¸æ­£ç¡®ï¼ŒæŠ›å‡ºå¼‚å¸¸
+            // ²ÎÊı²»ÕıÈ·£¬Å×³öÒì³£
             throw new ChaincodeException("Incorrect number of arguments. Expecting 2.");
         }
 
         String userId = args[0];
         int points = Integer.parseInt(args[1]);
 
-        // å°†ç§¯åˆ†å­˜å‚¨åˆ°åŒºå—é“¾çŠ¶æ€ä¸­
+        // ½«»ı·Ö´æ´¢µ½Çø¿éÁ´×´Ì¬ÖĞ
         stub.putStringState(userId, String.valueOf(points));
 
         System.out.println("Points stored successfully!");
     }
 
-    // ä»åŒºå—é“¾çŠ¶æ€ä¸­è·å–ç”¨æˆ·ç§¯åˆ†
+    // ´ÓÇø¿éÁ´×´Ì¬ÖĞ»ñÈ¡ÓÃ»§»ı·Ö
     private void getPoints(Context ctx, String[] args) {
         ChaincodeStub stub = ctx.getStub();
 
         if (args.length != 1) {
-            // å‚æ•°ä¸æ­£ç¡®ï¼ŒæŠ›å‡ºå¼‚å¸¸
+            // ²ÎÊı²»ÕıÈ·£¬Å×³öÒì³£
             throw new ChaincodeException("Incorrect number of arguments. Expecting 1.");
         }
 
         String userId = args[0];
 
-        // ä»åŒºå—é“¾çŠ¶æ€ä¸­è·å–ç”¨æˆ·ç§¯åˆ†
+        // ´ÓÇø¿éÁ´×´Ì¬ÖĞ»ñÈ¡ÓÃ»§»ı·Ö
         String points = stub.getStringState(userId);
 
         System.out.println("Points for user " + userId + ": " + points);
     }
 
-    // ä¸»æ–¹æ³•ï¼Œç”¨äºå¯åŠ¨æ™ºèƒ½åˆçº¦
+    // Ö÷·½·¨£¬ÓÃÓÚÆô¶¯ÖÇÄÜºÏÔ¼
     public static void main(String[] args) {
-        // å¯åŠ¨æ™ºèƒ½åˆçº¦
+        // Æô¶¯ÖÇÄÜºÏÔ¼
         new Chaincode_test().start(args);
     }
 }
