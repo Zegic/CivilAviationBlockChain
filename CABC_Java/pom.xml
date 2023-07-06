@@ -40,9 +40,21 @@
 			<version>2.4.1</version>
 		</dependency>
 		<dependency>
+			<groupId>com.github.erosb</groupId>
+			<artifactId>everit-json-schema</artifactId>
+			<version>1.14.2</version>
+			<!-- may be useless-->
+		</dependency>
+		<dependency>
 			<groupId>org.hyperledger.fabric-chaincode-java</groupId>
 			<artifactId>fabric-chaincode-shim</artifactId>
 			<version>2.5.0</version>
+		</dependency>
+		<!-- former version was 1.4.0 -->
+		<dependency>
+			<groupId>com.github.everit-org.json-schema</groupId>
+			<artifactId>org.everit.json.schema</artifactId>
+			<version>1.14.2</version>
 		</dependency>
 	</dependencies>
 </project>
