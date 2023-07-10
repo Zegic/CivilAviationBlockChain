@@ -1,0 +1,14 @@
+
+body{
+    background-color:#f3f5f7;
+}
+/* 图片居中 */
+.content{
+    text-align: center;
+ }
+ .content img{
+    padding: 30px;
+    margin: auto;
+    vertical-align: middle;
+ }
+

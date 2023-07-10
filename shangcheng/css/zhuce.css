@@ -1,0 +1,29 @@
+body{
+    background-color:#f3f5f7;
+}
+/* 图片居中 */
+.wrap{
+    text-align: center;
+}
+.wrap img{
+    padding:  10px;
+}
+.item{
+    height: 30px;
+}
+label{
+    width: 150px;
+    display: inline-block;
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+}
+.top input{
+    width:180px;
+}
+#date,#time{
+    width:100px;
+}
+.buttom{
+    padding-top: 20px;
+}

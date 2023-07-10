@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title> 注册界面</title>
+    <link rel="stylesheet" href="./css/zhuce.css">
+</head>
+<body>
+    <div class="wrap">
+      <img src="./imags/1200x420.png" alt="">
+        <form id="register" name="register" method="POST" action="" οnsubmit="checkForm()">
+            <div class="top">
+                <div class="item">
+                    <label>账号</label>
+                    <input type="text" />
+                </div>
+                <div class="item">
+                  <label>密码</label>
+                  <input type="text" />
+              </div>
+                <div class="item">
+                    <label>电话号码</label>
+                    <input id="phone-num" name="" type="text" />
+                </div>
+            </div>
+            <div class="buttom">
+                <div class="item">
+                    <label>出生年月</label>
+                    <input id="date" name="" placeholder="" type="date"/>
+                </div>
+            </div>
+            <div class="button-wrap">
+                <input type="Submit" value="Submit"/>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        // 对电话号码做检验
+        function checkForm(){
+            reg = /^1[0-9]{10}$/;
+            var phoneNum = document.getElementById("phone-num");
+            var isPhone = reg.test(phoneNum.value);
+            if (isPhone){
+               // 匹配
+                alert("注册成功");
+            } else {
+                // 不匹配
+                alert("请检查验证码是否正确");
+            }
+        }
+    </script>
+</body>
+</html>
