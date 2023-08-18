@@ -1,0 +1,193 @@
+Organizations:
+    - &Orderer
+        Name: Orderer
+        ID: OrdererMSP
+        MSPDir: ./crypto-config/ordererOrganizations/cabc.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererMSP.admin')"
+# cabc = civil aviation block chain, not cauc
+
+    - &Baiyi
+        Name: Baiyi
+        ID: BaiyiMSP
+        MSPDir: ./crypto-config/peerOrganizations/baiyi.cabc.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('BaiyiMSP.admin', 'BaiyiMSP.peer', 'BaiyiMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('BaiyiMSP.admin', 'BaiyiMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('BaiyiMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('BaiyiMSP.peer')"
+
+        AnchorPeers:
+            - Host: info_department.Baiyi.cabc.com
+              Port: 7051
+    - &AirChina
+        Name: AirChina
+        ID: AirChinaMSP
+        MSPDir: ./crypto-config/peerOrganizations/airchina.cabc.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('AirChinaMSP.admin', 'AirChinaMSP.peer', 'AirChinaMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('AirChinaMSP.admin', 'AirChinaMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('AirChinaMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('AirChinaMSP.peer')"
+
+        AnchorPeers:
+            - Host: info_department.AirChina.cabc.com
+              Port: 7061
+
+    - &OtherAirline
+        Name: OtherAirline
+        ID: OtherAirlineMSP
+        MSPDir: ./crypto-config/peerOrganizations/otherairline.cabc.com/msp
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OtherAirlineMSP.admin', 'OtherAirlineMSP.peer', 'OtherAirlineMSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OtherAirlineMSP.admin', 'OtherAirlineMSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OtherAirlineMSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('OtherAirlineMSP.peer')"
+
+        AnchorPeers:
+            - Host: info_department.OtherAirline.cabc.com
+              Port: 8051        
+Capabilities:
+    Channel: &ChannelCapabilities
+        V2_0: true
+    Orderer: &OrdererCapabilities
+        V2_0: true
+    Application: &ApplicationCapabilities
+        V2_0: true
+
+Application: &ApplicationDefaults
+
+    Organizations:
+
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+
+    OrdererType: solo
+
+    Addresses: 
+        - orderer.cabc.com:7050
+    BatchTimeout: 10s
+    BatchSize:
+
+        MaxMessageCount: 10
+
+        AbsoluteMaxBytes: 99 MB
+
+        PreferredMaxBytes: 512 KB
+
+    Organizations:
+
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        # BlockValidation specifies what signatures must be included in the block
+        # from the orderer for the peer to validate it.
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+Channel: &ChannelDefaults
+
+    Policies:
+        # Who may invoke the 'Deliver' API
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        # Who may invoke the 'Broadcast' API
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        # By default, who may modify elements at this config level
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+    Capabilities:
+        <<: *ChannelCapabilities
+Profiles:
+    TwoOrgsChannel:
+        Consortium: SampleConsortium
+        <<: *ChannelDefaults
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Baiyi
+                - *AirChina
+                - *OtherAirline
+            Capabilities:
+                <<: *ApplicationCapabilities
+    
+    TwoOrgsOrdererGenesis:
+        <<: *ChannelDefaults
+        Capabilities:
+            <<: *ChannelCapabilities
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *Orderer
+            Capabilities:
+                <<: *OrdererCapabilities
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                - *Baiyi
+                - *AirChina
+                - *OtherAirline

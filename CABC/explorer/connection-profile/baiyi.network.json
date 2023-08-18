@@ -1,0 +1,48 @@
+{
+	"name": "baiyi-network",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": true,
+		"adminCredential": {
+			"id": "exploreradmin",
+			"password": "exploreradminpw"
+		},
+		"enableAuthentication": true,
+		"organization": "BaiyiMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"mychannel": {
+			"peers": {
+				"peer.baiyi.cabc.com":{}
+			}
+		}
+	},
+	"organizations": {
+		"BaiyiMSP": {
+			"mspid": "BaiyiMSP",
+			"adminPrivateKey":{
+				"path": "/tmp/crypto/peerOrganizations/baiyi.cabc.com/users/Admin@baiyi.cabc.com/msp/keystore/priv_sk"
+			},
+			"peers": ["peer.baiyi.cabc.com"],
+			"signedCert": {
+				"path": "/tmp/crypto/peerOrganizations/baiyi.cabc.com/users/Admin@baiyi.cabc.com/msp/signcerts/Admin@baiyi.cabc.com-cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"peer.baiyi.cabc.com": {
+			"tlsCACerts": {
+				"path": "/tmp/crypto/peerOrganizations/baiyi.cabc.com/peers/peer.baiyi.cabc.com/tls/ca.crt"
+			},
+			"url": "grpcs://peer.baiyi.cabc.com:7051"
+		}
+	}
+}

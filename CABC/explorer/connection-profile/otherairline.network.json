@@ -1,0 +1,48 @@
+{
+	"name": "otherairline-network",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": true,
+		"adminCredential": {
+			"id": "exploreradmin",
+			"password": "exploreradminpw"
+		},
+		"enableAuthentication": true,
+		"organization": "OtherAirlineMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"mychannel": {
+			"peers": {
+				"peer.otherairline.cabc.com":{}
+			}
+		}
+	},
+	"organizations": {
+		"OtherAirlineMSP": {
+			"mspid": "OtherAirlineMSP",
+			"adminPrivateKey":{
+				"path": "/tmp/crypto/peerOrganizations/otherairline.cabc.com/users/Admin@otherairline.cabc.com/msp/keystore/priv_sk"
+			},
+			"peers": ["peer.otherairline.cabc.com"],
+			"signedCert": {
+				"path": "/tmp/crypto/peerOrganizations/otherairline.cabc.com/users/Admin@otherairline.cabc.com/msp/signcerts/Admin@otherairline.cabc.com-cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"peer.otherairline.cabc.com": {
+			"tlsCACerts": {
+				"path": "/tmp/crypto/peerOrganizations/otherairline.cabc.com/peers/peer.otherairline.cabc.com/tls/ca.crt"
+			},
+			"url": "grpcs://peer.otherairline.cabc.com:8051"
+		}
+	}
+}

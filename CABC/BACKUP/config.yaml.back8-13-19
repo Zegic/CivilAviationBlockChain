@@ -1,0 +1,311 @@
+
+version: 1.0.0
+
+client:
+
+  organization: baiyi
+
+  logging:
+    level: info
+
+  cryptoconfig:
+    path: /root/CBAC/fixtures/crypto-config
+
+  credentialStore:
+
+    path: "/tmp/state-store"
+
+    cryptoStore:
+      # Specific to the underlying KeyValueStore that backs the crypto key store.
+      path: /tmp/msp
+
+  BCCSP:
+    security:
+      enabled: true
+      default:
+        provider: "SW"
+      hashAlgorithm: "SHA2"
+      softVerify: true
+      level: 256
+
+  tlsCerts:
+    # [Optional]. Use system certificate pool when connecting to peers, orderers (for negotiating TLS) Default: false
+    systemCertPool: true
+
+    # [Optional]. Client key and cert for TLS handshake with peers and orderers
+    client:
+      key:
+        path: /root/go/src/CABC/fixtures/crypto-config/ordererOrganizations/cabc.com/users/Admin@cabc.com/tls/client.key
+      cert:
+        path: /root/go/src/CABC/fixtures/crypto-config/ordererOrganizations/cabc.com/users/Admin@cabc.com/tls/client.crt
+
+
+channels:
+
+  # multi-org test channel
+  mychannel:
+
+    peers:
+      peer.baiyi.cabc.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+      peer.airchina.cbac.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+      peer.otherairline.cabc.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+
+
+    policies:
+      queryChannelConfig:
+        minResponses: 1
+        maxTargets: 1
+        retryOpts:
+          attempts: 5
+          initialBackoff: 500ms
+          maxBackoff: 5s
+          backoffFactor: 2.0
+
+    discovery:
+      #[Optional] discovery info will be retrieved for these number of random targets
+      maxTargets: 2
+      #[Optional] retry options for retrieving discovery info
+      retryOpts:
+        #[Optional] number of retry attempts
+        attempts: 4
+        #[Optional] the back off interval for the first retry attempt
+        initialBackoff: 500ms
+        #[Optional] the maximum back off interval for any retry attempt
+        maxBackoff: 5s
+        #[Optional] he factor by which the initial back off period is exponentially incremented
+        backoffFactor: 2.0
+#
+# list of participating organizations in this nettestwork
+#
+organizations:
+  Baiyi:
+    mspid: BaiyiMSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/baiyi.cabc.com/users/{username}@baiyi.cabc.com/msp
+
+    peers:
+      - peer.baiyi.cabc.com
+# zgx: below the option users was add by me 
+    users:
+      Admin:
+        cert:
+          path: /root/go/src/CABC/fixtures/crypto-config/peerOrganizations/baiyi.cabc.com/users/Admin@baiyi.cabc.com/msp/signcerts/Admin@baiyi.cabc.com-cert.pem
+        key:
+          path: /root/go/src/CABC/fixtures/crypto-config/peerOrganizations/baiyi.cabc.com/users/Admin@baiyi.cabc.com/msp/keystore/priv_sk
+
+  AirChina:
+    mspid: AirChinaMSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/airchina.cabc.com/users/{username}@airchina.cabc.com/msp
+
+    peers:
+      - peer.airchina.cabc.com
+    users:
+      Admin:
+        cert:
+          path: /root/go/src/CABC/fixtures/crypto-config/peerOrganizations/airchina.cabc.com/users/Admin@airchina.cabc.com/msp/signcerts/Admin@airchina.cabc.com-cert.pem
+        key:
+          path: /root/go/src/CABC/fixtures/crypto-config/peerOrganizations/airchina.cabc.com/users/Admin@airchina.cabc.com/msp/keystore/priv_sk
+
+  OtherAirline:
+    mspid: OtherAirlineMSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+    cryptoPath:  peerOrganizations/otherairline.cabc.com/users/{username}@otherairline.cabc.com/msp
+
+    peers:
+      - peer.otherairline.cabc.com
+    users:
+      Admin:
+        cert:
+          path: /root/go/src/CABC/fixtures/crypto-config/peerOrganizations/otherairline.cabc.com/users/Admin@otherairline.cabc.com/msp/signcerts/Admin@otherairline.cabc.com-cert.pem
+        key:
+          path: /root/go/src/CABC/fixtures/crypto-config/peerOrganizations/otherairline.cabc.com/users/Admin@otherairline.cabc.com/msp/keystore/priv_sk
+
+
+  Orderer:
+    # Membership Service Provider ID for this organization
+    mspID: OrdererMSP
+
+    # Needed to load users crypto keys and certs for this org (absolute path or relative to global crypto path, DEV mode)
+    cryptoPath: ordererOrganizations/cabc.com/users/{username}@cabc.com/msp
+
+
+
+    # [Optional]. Certificate Authorities issue certificates for identification purposes in a Fabric based
+    # nettestwork. Typically certificates provisioning is done in a separate process outside of the
+    # runtime nettestwork. Fabric-CA is a special certificate authority that provides a REST APIs for
+    # dynamic certificate management (enroll, revoke, re-enroll). The following section is only for
+    # Fabric-CA servers.
+
+
+    # the profile will contain public information about organizations other than the one it belongs to.
+    # These are necessary information to make transaction lifecycles testwork, including MSP IDs and
+    # peers with a public URL to send transaction proposals. The file will not contain private
+    # information reserved for members of the organization, such as admin key and certificate,
+    # fabric-ca registrar enroll ID and secret, etc.
+    #  org1:
+    #    mspid: org1MSP
+
+    # This org's MSP store (absolute path or relative to client.cryptoconfig)
+  #    cryptoPath:  peerOrganizations/org1.cabc.com/users/{username}@org1.cabc.com/msp
+
+  #    peers:
+  #      - peer0.org1.cabc.com
+
+
+
+  # Orderer Org name
+
+
+
+#
+# List of orderers to send transaction and channel create/update requests to. For the time
+# being only one orderer is needed. If more than one is defined, which one get used by the
+# SDK is implementation specific. Consult each SDK's documentation for its handling of orderers.
+#
+orderers:
+
+
+  orderer.cabc.com:
+    # [Optional] Default: Infer from hostname
+    url: orderer.cabc.com:7050
+
+    # these are standard properties defined by the gRPC library
+    # they will be passed in as-is to gRPC client constructor
+    grpcOptions:
+      ssl-target-name-override: orderer.cabc.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: false
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /root/go/src/CABC/fixtures/crypto-config/ordererOrganizations/cabc.com/tlsca/tlsca.cabc.com-cert.pem
+
+#
+# List of peers to send various requests to, including endorsement, query
+# and event listener registration.
+#
+peers:
+
+
+  peer.baiyi.cabc.com:
+    # this URL is used to send endorsement and query requests
+    # [Optional] Default: Infer from hostname
+    url: peer.baiyi.cabc.com:7051
+    grpcOptions:
+      ssl-target-name-override: peer.baiyi.cabc.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: false
+    #grpcOptions:
+    #  ssl-target-name-override: peer0.org1.cabc.com
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /root/go/src/CABC/fixtures/crypto-config/peerOrganizations/baiyi.cabc.com/tlsca/tlsca.baiyi.cabc.com-cert.pem
+
+
+  peer.airchina.cabc.com:
+    url: peer.airchina.cabc.com:7061
+    #grpcOptions:
+    #  ssl-target-name-override: peer0.org1.cabc.com
+    grpcOptions:
+      ssl-target-name-override: peer.airchina.cabc.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: false
+    tlsCACerts:
+      path: /root/go/src/CABC/fixtures/crypto-config/peerOrganizations/airchina.cabc.com/tlsca/tlsca.airchina.cabc.com-cert.pem
+
+
+
+  peer.otherairline.cabc.com:
+    # this URL is used to send endorsement and query requests
+    # [Optional] Default: Infer from hostname
+    url: peer.otherairline.cabc.com:8051
+    grpcOptions:
+      ssl-target-name-override: peer.otherairline.cabc.com
+      # These parameters should be set in coordination with the keepalive policy on the server,
+      # as incompatible settings can result in closing of connection.
+      # When duration of the 'keep-alive-time' is set to 0 or less the keep alive client parameters are disabled
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      # allow-insecure will be taken into consideration if address has no protocol defined, if true then grpc or else grpcs
+      allow-insecure: false
+    #grpcOptions:
+    #  ssl-target-name-override: peer0.org1.cabc.com
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: /root/go/src/CABC/fixtures/crypto-config/peerOrganizations/otherairline.cabc.com/tlsca/tlsca.otherairline.cabc.com-cert.pem
+
+
+#
+# Fabric-CA is a special kind of Certificate Authority provided by Hyperledger Fabric which allows
+# certificate management to be done via REST APIs. Application may choose to use a standard
+# Certificate Authority instead of Fabric-CA, in which case this section would not be specified.
+#
+entityMatchers:
+  peer:
+
+    - pattern: (\w+).cabc.com:(\d+)
+      urlSubstitutionExp: ${1}.cabc.com:${2}
+      sslTargetOverrideUrlSubstitutionExp: ${1}.cabc.com
+      mappedHost: peer.baiyi.cabc.com
+
+    - pattern: (\w+).cabc.com:(\d+)
+      urlSubstitutionExp: ${1}.cabc.com:${2}
+      sslTargetOverrideUrlSubstitutionExp: ${1}.cabc.com
+      mappedHost: peer.airchina.cabc.com
+
+    - pattern: (\w+).cabc.com:(\d+)
+      urlSubstitutionExp: ${1}.cabc.com:${2}
+      sslTargetOverrideUrlSubstitutionExp: ${1}.cabc.com
+      mappedHost: peer.otherairline.cabc.com
+
+
+  orderer:
+
+    - pattern: (\w+).cabc.(\w+)
+      urlSubstitutionExp: orderer.cabc.com:7050
+      sslTargetOverrideUrlSubstitutionExp: orderer.cabc.com
+      mappedHost: orderer.cabc.com

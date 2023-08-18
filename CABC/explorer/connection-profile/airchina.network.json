@@ -1,0 +1,48 @@
+{
+	"name": "airchina-network",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": true,
+		"adminCredential": {
+			"id": "exploreradmin",
+			"password": "exploreradminpw"
+		},
+		"enableAuthentication": true,
+		"organization": "AirChinaMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"mychannel": {
+			"peers": {
+				"peer.airchina.cabc.com":{}
+			}
+		}
+	},
+	"organizations": {
+		"AirChinaMSP": {
+			"mspid": "AirChinaMSP",
+			"adminPrivateKey":{
+				"path": "/tmp/crypto/peerOrganizations/airchina.cabc.com/users/Admin@airchina.cabc.com/msp/keystore/priv_sk"
+			},
+			"peers": ["peer.airchina.cabc.com"],
+			"signedCert": {
+				"path": "/tmp/crypto/peerOrganizations/airchina.cabc.com/users/Admin@airchina.cabc.com/msp/signcerts/Admin@airchina.cabc.com-cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"peer.airchina.cabc.com": {
+			"tlsCACerts": {
+				"path": "/tmp/crypto/peerOrganizations/airchina.cabc.com/peers/peer.airchina.cabc.com/tls/ca.crt"
+			},
+			"url": "grpcs://peer.airchina.cabc.com:7061"
+		}
+	}
+}

@@ -1,0 +1,37 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: cabc.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+  - Name: Baiyi
+    Domain: baiyi.cabc.com
+    EnableNodeOUs: true
+    #Template:
+    #  Count: 2
+    Users:
+      Count: 1
+    Specs:
+      - Hostname: peer
+  - Name: AirChina
+    Domain: airchina.cabc.com
+    EnableNodeOUs: true
+    #Template:
+    #  Count: 2
+    Users:
+      Count: 1
+    Specs:
+      - Hostname: peer
+  - Name: OtherAirline
+    Domain: otherairline.cabc.com
+    EnableNodeOUs: true
+    #Template:
+     # Count: 2
+    Users:
+      Count: 1
+    Specs:
+      - Hostname: peer
+      # cabc = civil aviation block chain, not cauc
+

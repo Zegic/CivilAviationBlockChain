@@ -1,0 +1,18 @@
+{
+	"network-configs": {
+		"baiyi-network": {
+			"name": "baiyi network",
+			"profile": "./connection-profile/baiyi.network.json"
+		},
+		"airchina-network": {
+			"name": "airchina Network",
+			"profile": "./connection-profile/airchina.network.json"
+		},
+		"otherairline-network": {
+			"name": "otherairline Network",
+			"profile": "./connection-profile/otherairline.network.json"
+		}
+	},
+	"license": "Apache-2.0"
+}
+
