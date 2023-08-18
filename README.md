@@ -1,9 +1,5 @@
 # CivilAviationBlockChain
 大创-区块链-民航.
 简称CABC
-.
-https://github.com/hyperledger/fabric-sdk-go
-合约
-https://github.com/hyperledger/fabric-chaincode-go
-维基
-https://wiki.hyperledger.org/
+区块链已经搭建完成
+链码部署测试完成
